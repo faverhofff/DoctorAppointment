@@ -24,7 +24,7 @@ namespace DoctorAppointmentApi.Controllers
             _doctorService = doctorService;
         }
 
-        [HttpGet("appoinments/{doctorId}")]
+        [HttpGet("appointments/{doctorId}")]
         public async Task<ActionResult<IEnumerable<Appointment>>> ListAppointments(string doctorId)
         {
             var appointments = _doctorService.GetAppointments(doctorId);
