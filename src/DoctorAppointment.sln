@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoctorAppointmentApi", "Doc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoctorAppointmentDataLayer", "DoctorAppoinmentDataLayer\DoctorAppointmentDataLayer.csproj", "{6C221451-1F8B-4810-AEFF-B5167E3825C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoctoAppointmentTest", "DoctoAppointmentTest\DoctoAppointmentTest.csproj", "{FAC84EDF-F4A4-496F-9234-0373DEA78F38}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoctorAppointmentTest", "DoctoAppointmentTest\DoctorAppointmentTest.csproj", "{FAC84EDF-F4A4-496F-9234-0373DEA78F38}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
