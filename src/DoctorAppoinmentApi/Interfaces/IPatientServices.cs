@@ -27,6 +27,6 @@ namespace DoctorAppointmentApi.Services
         /// </summary>
         /// <param name="patientName"></param>
         /// <returns>Task<Patient></returns>
-        public Task<Patient> Create(string patientName);
+        public Task<Patient> CreatePatient(string patientName);
     }
 }

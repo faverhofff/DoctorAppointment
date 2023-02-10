@@ -27,7 +27,7 @@ namespace DoctorAppointmentApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePatient([FromBody] CreatePatientRequest request)
         {
-            var newAppointment = await _patientService.Create(request.Name).ConfigureAwait(false);
+            var newAppointment = await _patientService.CreatePatient(request.Name).ConfigureAwait(false);
             return Ok(newAppointment);
         }
 

@@ -47,7 +47,7 @@ namespace DoctorAppointmentApi.Services
         /// <param name="patientName"></param>
         /// <returns>Task<Patient></returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public async Task<Patient> Create(string patientName)
+        public async Task<Patient> CreatePatient(string patientName)
         {
             var newPatient = new Patient()
             {
