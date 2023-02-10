@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>doctor_appointment_DataLayer</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <PackageReference Include="MongoDB.Bson" Version="2.19.0" />
+    <PackageReference Include="ParkBee.MongoDb" Version="1.2.2" />
+    <PackageReference Include="ParkBee.MongoDb.DependencyInjection" Version="1.0.5" />
+  </ItemGroup>
+
+</Project>
