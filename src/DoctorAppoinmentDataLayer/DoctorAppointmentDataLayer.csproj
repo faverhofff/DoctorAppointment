@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>doctor_appointment_DataLayer</RootNamespace>
+    <RootNamespace>DoctorAppointmentDataLayer</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
