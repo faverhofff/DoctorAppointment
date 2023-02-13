@@ -6,4 +6,4 @@ run.bat
 
 http://localhost -> server
 
-http://localhost/swagger -> endpoint management
+http://localhost/swagger/index.html -> endpoint management
