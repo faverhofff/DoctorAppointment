@@ -6,7 +6,6 @@
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
@@ -14,6 +13,7 @@ WORKDIR /src
 COPY ["DoctorAppointment.sln", "."]
 COPY [".", "."]
 RUN dotnet restore "./DoctorAppointment.sln"
+
 COPY . .
 WORKDIR "/src/."
 RUN dotnet build "DoctorAppointment.sln" -c Release -o /app/build
@@ -24,4 +24,4 @@ RUN dotnet publish "DoctorAppointment.sln" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "DoctorAppointmentApi.dll"]
+ENTRYPOINT ["dotnet", "DoctorAppointmentApi.dll" ]
