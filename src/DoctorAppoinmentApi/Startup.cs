@@ -1,11 +1,14 @@
 using DoctorAppointmentApi.Services;
 using DoctorAppointmentDataLayer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using ParkBee.MongoDb.DependencyInjection;
 
 namespace DoctorAppointment
@@ -27,8 +30,8 @@ namespace DoctorAppointment
 
             services.AddMongoContext<MongoDbContext>(options =>
             {
-                options.ConnectionString = "mongodb://localhost:27017";
-                options.DatabaseName = "hospital";
+                options.ConnectionString = Configuration["AppointmentsDatabase:ConnectionString"]; 
+                options.DatabaseName = Configuration["AppointmentsDatabase:DatabaseName"];
             });
 
             services.AddSwaggerGen(c =>
@@ -54,14 +57,20 @@ namespace DoctorAppointment
 
             app.UseRouting();
 
+            app.UseExceptionHandler(c => c.Run(async context =>
+            {
+                var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+                var exception = exceptionHandlerPathFeature.Error;
+
+                var result = JsonConvert.SerializeObject(new { Error = exception.Message });
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsync(result);
+            }));
+
             app.UseCors(x => x
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader());
-
-            //app.UseAuthentication();
-
-            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

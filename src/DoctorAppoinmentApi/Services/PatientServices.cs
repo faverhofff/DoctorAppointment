@@ -1,6 +1,8 @@
 ﻿using DoctorAppointmentApi.Exceptions;
 using DoctorAppointmentDataLayer;
+using DoctorAppointmentDataLayer.Extensions;
 using DoctorAppointmentDataLayer.Models;
+using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +38,8 @@ namespace DoctorAppointmentApi.Services
             if (appointment == null)
                 throw new AppointmentNotFoundException();
 
-            await _context.Appointments.DeleteByKey(appointment.Id).ConfigureAwait(false);
+            var findByKeyDefinition = _context.GetFindByKeyFilterDefinition<Appointment>(appointmentId);
+            await _context.Appointments.DeleteOneAsync(findByKeyDefinition).ConfigureAwait(false);
 
             return await Task.FromResult(true).ConfigureAwait(false);
         }
@@ -51,13 +54,18 @@ namespace DoctorAppointmentApi.Services
         {
             var newPatient = new Patient()
             {
+                Id = null,
                 Name = patientName
             };
 
-            await _context.Patients.InsertOneAsync(newPatient).ConfigureAwait(false);
-            var patient = await _context.Patients.FirstOrDefaultAsync(x => x.Id == newPatient.Id).ConfigureAwait(false);
+            var options = new InsertOneOptions();
+            options.BypassDocumentValidation = false;
+            await _context.Patients.InsertOneAsync(newPatient, options).ConfigureAwait(false);
 
             return await Task.FromResult(newPatient).ConfigureAwait(false);
         }
+
+
+
     }
 }

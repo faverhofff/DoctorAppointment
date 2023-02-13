@@ -8,6 +8,5 @@ namespace DoctorAppointmentApi.Exceptions
         public PatientNotFoundException() : base("Patient not found.")
         {
         }
-
     }
 }

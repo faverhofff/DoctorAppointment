@@ -1,7 +1,9 @@
 ﻿using DoctorAppointmentApi.Exceptions;
 using DoctorAppointmentApi.Extensions;
 using DoctorAppointmentDataLayer;
+using DoctorAppointmentDataLayer.Extensions;
 using DoctorAppointmentDataLayer.Models;
+using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
@@ -33,7 +35,7 @@ namespace DoctorAppointmentApi.Services
         /// <param name="date"></param>
         /// <returns>bool</returns>
         public bool IsAvailableFor(string doctorId, DateTime date) 
-            => _context.Appointments.Where(x => x.DoctorId.Equals(doctorId) && x.Schedule.Equals(date)).Any();
+            => _context.Appointments.Where(x => x.DoctorId.Equals(doctorId) && !x.Schedule.Equals(date)).Any();
 
         /// <summary>
         /// Handle change appointment date
@@ -56,8 +58,9 @@ namespace DoctorAppointmentApi.Services
             var newAppointment = appointment.Clone();
             newAppointment.Schedule = newDate;
 
-            await _context.Appointments.DeleteByKey(appointment.Id).ConfigureAwait(false);
-            await _context.Appointments.InsertOneAsync(newAppointment);
+            var findByKeyDefinition = _context.GetFindByKeyFilterDefinition<Appointment>(appointmentId);
+            await _context.Appointments.DeleteOneAsync(findByKeyDefinition).ConfigureAwait(false);
+            await _context.Appointments.InsertOneAsync(newAppointment).ConfigureAwait(false);
 
             return await Task.FromResult(newAppointment).ConfigureAwait(false);
         }
@@ -109,8 +112,9 @@ namespace DoctorAppointmentApi.Services
                 Name = doctorName
             };
 
-            await _context.Doctors.InsertOneAsync(newDoctor).ConfigureAwait(false);
-            var doctor = await _context.Doctors.FirstOrDefaultAsync(x => x.Id == newDoctor.Id).ConfigureAwait(false);
+            var options = new InsertOneOptions();
+            options.BypassDocumentValidation = false;
+            await _context.Doctors.InsertOneAsync(newDoctor, options).ConfigureAwait(false);
 
             return await Task.FromResult(newDoctor).ConfigureAwait(false);
         }

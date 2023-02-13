@@ -1,5 +1,4 @@
-﻿using DoctorAppointmentApi.Filters;
-using DoctorAppointmentApi.Requests;
+﻿using DoctorAppointmentApi.Requests;
 using DoctorAppointmentApi.Services;
 using DoctorAppointmentDataLayer.Models;
 
@@ -11,7 +10,6 @@ using System.Threading.Tasks;
 namespace DoctorAppointmentApi.Controllers
 {
     [ApiController]
-    [JsonExceptionFilter]
     [Route("api/doctor")]
     public class DoctorController : ControllerBase
     {
@@ -24,6 +22,11 @@ namespace DoctorAppointmentApi.Controllers
             _doctorService = doctorService;
         }
 
+        /// <summary>
+        /// Get appointments from doctor endpoint
+        /// </summary>
+        /// <param name="doctorId"></param>
+        /// <returns></returns>
         [HttpGet("appointments/{doctorId}")]
         public async Task<ActionResult<IEnumerable<Appointment>>> ListAppointments(string doctorId)
         {
@@ -31,8 +34,13 @@ namespace DoctorAppointmentApi.Controllers
             return Ok(appointments);
         }
 
+        /// <summary>
+        /// Create doctor endpoint
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Doctor>> Create([FromBody] CreateDoctorRequest request)
+        public async Task<ActionResult<Doctor>> CreateDoctor([FromBody] CreateDoctorRequest request)
         {
             var doctor = await _doctorService.CreateDoctor(request.Name).ConfigureAwait(false);
             return Ok(doctor);

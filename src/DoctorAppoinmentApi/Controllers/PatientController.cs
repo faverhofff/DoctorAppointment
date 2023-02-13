@@ -1,17 +1,14 @@
-﻿using DoctorAppointmentApi.Filters;
-using DoctorAppointmentApi.Requests;
+﻿using DoctorAppointmentApi.Requests;
 using DoctorAppointmentApi.Services;
 using DoctorAppointmentDataLayer.Models;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DoctorAppointmentApi.Controllers
 {
     [ApiController]
-    [JsonExceptionFilter]
     [Route("api/patient")]
     public class PatientController : ControllerBase
     {
@@ -24,19 +21,34 @@ namespace DoctorAppointmentApi.Controllers
             _doctorService = doctorService;
         }
 
+        /// <summary>
+        /// Create patient endpoint
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> CreatePatient([FromBody] CreatePatientRequest request)
+        public async Task<ActionResult<Patient>> CreatePatient([FromBody] CreatePatientRequest request)
         {
             var newAppointment = await _patientService.CreatePatient(request.Name).ConfigureAwait(false);
             return Ok(newAppointment);
         }
 
+        /// <summary>
+        /// Get appointments from patient endpoint
+        /// </summary>
+        /// <param name="patientId"></param>
+        /// <returns></returns>
         [HttpGet("appointments/{patientId}")]
         public async Task<ActionResult<IEnumerable<Appointment>>> ListAppointments(string patientId)
         {
             return Ok(_patientService.GetAppointments(patientId));
         }
 
+        /// <summary>
+        /// Create appointment endpoint
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("appointments")]
         public async Task<ActionResult<Appointment>> CreateAppointment([FromBody] CreateAppointmentRequest request)
         {
@@ -44,13 +56,23 @@ namespace DoctorAppointmentApi.Controllers
             return Ok(newAppointment);
         }
 
+        /// <summary>
+        /// Change date or update appointment endpoint
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPut("appointments")]
         public async Task<ActionResult<Appointment>> UpdateAppointment([FromBody] UpdateAppointmentRequest request)
         {
-            var newAppointmentData = _doctorService.ChangeDateForAppointment(request.AppointmentId, request.Schedule);
+            var newAppointmentData = await _doctorService.ChangeDateForAppointment(request.AppointmentId, request.Schedule).ConfigureAwait(false);
             return Ok(newAppointmentData);
         }
 
+        /// <summary>
+        /// Cancel/Delete appointment endpoint
+        /// </summary>
+        /// <param name="appointmendId"></param>
+        /// <returns></returns>
         [HttpDelete("appointments/{appointmendId}")]
         public async Task<ActionResult<Appointment>> CancelAppointment(string appointmendId)
         {
